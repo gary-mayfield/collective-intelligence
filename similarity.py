@@ -160,3 +160,19 @@ def getRecommendedItems(prefs, itemMatch, user):
     rankings.sort()
     rankings.reverse()
     return rankings
+
+def loadMovieLens(path='./ml-latest-small'):
+
+    # Get movie titles
+    movies = {}
+    for line in open(path+'/movies.csv'):
+        (id, title) = line.split(',')[0:2]
+        movies[id] = title
+
+    # Load data
+    prefs = {}
+    for line in open(path+'/ratings.csv'):
+        (user, movieid, rating, ts) = line.split(',')
+        prefs.setdefault(user, {})
+        prefs[user][movies[movieid]] = float(rating)
+    return prefs
